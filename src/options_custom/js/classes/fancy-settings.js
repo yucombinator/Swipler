@@ -25,7 +25,7 @@
               console.log('Acquired permission!');
               chrome.runtime.sendMessage({permissionAcquired: true}, function(response) {
                 console.log("received response");
-              }););
+              });
             }, function() {
               console.log('Error!')
             });
