@@ -73,18 +73,22 @@ var newTab = function(){
 var startListening = function(){
   console.log('init!')
   window.doppler.init(function(bandwidth) {
-          var threshold = 10;
-          if (bandwidth.left > threshold || bandwidth.right > threshold) {
-            var scale    = 10;
-            var baseSize = 100;
-            var diff = bandwidth.left - bandwidth.right;
-            var dimension = (baseSize + scale*diff) + 'px';
-            //document.getElementById('box').style.width  = dimension;
-            //document.getElementById('box').style.height = dimension;
-          }
-});
+    var threshold = 10;
+    if (bandwidth.left > threshold || bandwidth.right > threshold) {
+      var scale    = 10;
+      var baseSize = 100;
+      var diff = bandwidth.left - bandwidth.right;
+      var dimension = (baseSize + scale*diff) + 'px';
+      //document.getElementById('box').style.width  = dimension;
+      //document.getElementById('box').style.height = dimension;
+    }
+  });
 }
 
+var stopListening = function(){
+  console.log('stop!')
+  window.doppler.stop();
+}
 
 //example of using a message handler from the inject scripts
 chrome.extension.onMessage.addListener(
@@ -92,5 +96,7 @@ chrome.extension.onMessage.addListener(
     if (request.permissionAcquired == true){
       sendResponse();
       startListening();
+    } else if (request.killswitch == true){
+      stopListening();
     }
 });

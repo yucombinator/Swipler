@@ -107,10 +107,6 @@ window.doppler = (function() {
     });
   };
 
-
-
-
-
   var freqToIndex = function(analyser, freq) {
     var nyquist = ctx.sampleRate / 2;
     return Math.round( freq/nyquist * analyser.fftSize/2 );
@@ -123,6 +119,7 @@ window.doppler = (function() {
 
   return {
     init: function(callback) {
+      ctx.resume();
       navigator.getUserMedia_ = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
       navigator.getUserMedia_({ audio: { optional: [{ echoCancellation: false }] } }, function(stream) {
         handleMic(stream, readMic, callback);
@@ -130,6 +127,7 @@ window.doppler = (function() {
     },
     stop: function () {
       clearInterval(readMicInterval);
+      ctx.suspend();
     }
   }
 })(window, document);

@@ -1,23 +1,56 @@
+// CONSTANTS
+var threshold = 4;
+var swipeThreshold = 3;
+var scale    = 10;
+var baseSize = 100;
+
+// TRACKING VARS
+var lastVal = 0;
+
+function logMovement(movement) { 
+    var s = ''; 
+    while (s.length < movement+10) s += "**"; 
+    console.log(s);
+}
+
+function sizeBox(movement) {
+  var dimension = (baseSize + scale*movement) + 'px';
+
+  document.getElementById('box').style.width  = dimension;
+  document.getElementById('box').style.height = dimension;
+}
+
+function checkSwipes(movement) {
+  if(movement < -swipeThreshold) {
+    swipeEvent(false);
+  } else if(movement <= swipeThreshold) {
+    document.getElementById('click').innerHTML = "None";
+  } else {
+    swipeEvent(true);
+  }
+}
+
+function swipeEvent(isRight) {
+  if(isRight) {
+    document.getElementById('click').innerHTML = "Right";
+  } else {
+    document.getElementById('click').innerHTML = "Left";
+  }
+}
+
 window.addEventListener('load', function() {
   window.doppler.init(function(bandwidth) {
-    var threshold = 4;
     if (bandwidth.left > threshold || bandwidth.right > threshold) {
-        var scale    = 10;
-        var baseSize = 100;
-        var diff = bandwidth.left - bandwidth.right;
-        var dimension = (baseSize + scale*diff) + 'px';
+      var movement = bandwidth.left - bandwidth.right;
+      // lower values mean moving towards the microphone, a swipe goes to around -4 for left and +4 for right
 
-        console.log(dimension);
-        document.getElementById('box').style.width  = dimension;
-        document.getElementById('box').style.height = dimension;
+      if(lastVal != movement) {
+        lastVal = movement;
 
-        if(dimension < 100) {
-          document.getElementById('click').innerHTML = "Left";
-        } else if(dimension <= 130) {
-          document.getElementById('click').innerHTML = "None";
-        } else {
-          document.getElementById('click').innerHTML = "Right";
-        }
+        logMovement(movement);
+        sizeBox(movement);
+        checkSwipes(movement);
       }
-    });
+    }
   });
+});
