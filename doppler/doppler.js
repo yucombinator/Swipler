@@ -18,6 +18,7 @@ window.doppler = (function() {
   var freqSweepEnd = 22000;
 
   var lastAction;
+  var lastChange;
 
   var getBandwidth = function(analyser, freqs) {
     var primaryTone = freqToIndex(analyser, freq);
@@ -102,11 +103,14 @@ window.doppler = (function() {
   var scale    = 10;
   var baseSize = 100;
   var cooldown = 500;
+  var maxFastSwipeFrames = 5;
+  var fastSwipeFrames = maxFastSwipeFrames;
 
   // SWIPE THRESHOLD
-  var leftBound = -3;
-  var rightBound = 3;
-  var fuckBound = 14;
+  var highestRight = 0;
+  var leftBound = -5;
+  var rightBound = 6;
+  var fuckBound = 20;
 
   // SWIPE TYPES
   var SWIPE_LEFT = 0;
@@ -138,7 +142,7 @@ window.doppler = (function() {
         lastAction = Date.now();
       } else {
         swipeEvent(SWIPE_FUCK, userCallback);
-        lastAction = Date.now();
+        lastAction = Date.now() + cooldown;
       }
     }
   }
@@ -162,13 +166,36 @@ window.doppler = (function() {
     var band = getBandwidth(analyser, audioData);
     if (band.left > threshold || band.right > threshold) {
       var movement = band.left - band.right;
+      
+      if (Date.now() - lastChange > 800) {
+        fastSwipeFrames = maxFastSwipeFrames;
+        highestRight = 0;
+      }
+      
       // lower values mean moving towards the microphone, a swipe goes to around -4 for left and +4 for right
 
       if(lastVal != movement) {
+        lastChange = Date.now();
+        if (movement > rightBound || fastSwipeFrames != maxFastSwipeFrames) {
+//          console.log(fastSwipeFrames != maxFastSwipeFrames);
+          fastSwipeFrames--;
+//          console.log(fastSwipeFrames + " fastSwipeFrames is " + fastSwipeFrames + " and maxFastSwipeFrames " + maxFastSwipeFrames);
+          console.log(fastSwipeFrames + ": " + highestRight);
+          if (movement > highestRight) {
+            highestRight = movement; 
+          }
+          if (fastSwipeFrames == 0){
+//            console.log("Highest " + highestRight);
+            fastSwipeFrames = maxFastSwipeFrames;
+            //logMovement(movement);
+            checkSwipes(highestRight, userCallback);
+            highestRight = 0;
+          }
+        } else {
+          checkSwipes(movement, userCallback);
+          fastSwipeFrames = maxFastSwipeFrames
+        }
         lastVal = movement;
-
-        logMovement(movement);
-        checkSwipes(movement, userCallback);
       }
     }
 
