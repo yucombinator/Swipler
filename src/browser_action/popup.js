@@ -13,6 +13,11 @@ var startswitch = function(){
 var settings = function(){
   chrome.tabs.create({ url: "src/options_custom/index.html" });
 }
+
+var calibrate = function(){
+  chrome.runtime.sendMessage({calibrate: true});
+}
+
 function main() {
   // Initialization work goes here.
   chrome.runtime.sendMessage({getstatus: true},function(res){
@@ -34,5 +39,6 @@ document.addEventListener('DOMContentLoaded', function () {
   document.querySelector('.stop-button').addEventListener('click', killswitch);
   document.querySelector('.start-button').addEventListener('click', startswitch);
   document.querySelector('.settings-button').addEventListener('click', settings);
+  document.querySelector('.calibrate-button').addEventListener('click', calibrate);
   main();
 });

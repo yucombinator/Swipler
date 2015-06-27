@@ -106,6 +106,9 @@ chrome.extension.onMessage.addListener(
       startListening();
     } else if(request.getstatus == true){
       sendResponse(window.doppler.getStatus());
+    } else if(request.calibrate == true){
+      startListening();
+      window.doppler.calibrate();
     }
 });
 chrome.commands.onCommand.addListener(function (command) {

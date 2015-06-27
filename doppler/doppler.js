@@ -158,6 +158,7 @@ window.doppler = (function() {
       userCallback("FUCK");
     }
   }
+
   var readMicInterval = 0;
   var readMic = function(analyser, userCallback) {
     var audioData = new Uint8Array(analyser.frequencyBinCount);
@@ -192,9 +193,12 @@ window.doppler = (function() {
             highestRight = 0;
           }
         } else {
+
           checkSwipes(movement, userCallback);
+
           fastSwipeFrames = maxFastSwipeFrames
         }
+        calibration(movement);
         lastVal = movement;
       }
     }
@@ -244,7 +248,7 @@ window.doppler = (function() {
   };
   var started = false;
   return {
-    init: function(callback) {
+    initial: function(callback) {
       ctx.resume();
       started = true;
       navigator.getUserMedia_ = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
@@ -263,34 +267,62 @@ window.doppler = (function() {
       console.log(ctx.state);
       return started;
     }
+    calibrate: function(){
+      startCalibrationForAll();
+    }
   }
-})(window, document);
-
-
-
-
-
-
-
-
 
 // **** CALLIBRATION FUNCTIONS ****
+var isCalibrating = false;
+var calibrationArray;
+var calibrationType;
+var CALIB_LEFT = 0;
+var CALIB_RIGHT = 1;
+var CALIB_FUCK = 2;
 
-function finishCalibrateLeft(calArray) {
-    for (var i = 0; i < calArray.length; i++) {
-      calArray[i] = -calArray[i];
+function startCalibrationForAll(){
+  window.setInterval(startCalibration(CALIB_LEFT), 3000);
+  finishCalibration();
+  window.setInterval(startCalibration(CALIB_RIGHT), 3000);
+  finishCalibration();
+  window.setInterval(startCalibration(CALIB_FUCK), 3000);
+  finishCalibration();
+}
+
+function startCalibration(whichCalibration) {
+  calibrationType = whichCalibration;
+  isCalibrating = true;
+  calibrationArray = new Array();
+}
+
+function finishCalibration() {
+  if(calibrationType == CALIB_LEFT) {
+    finishCalibrateLeft();
+  } else if(calibrationType == CALIB_RIGHT) {
+    finishCalibrateRight();
+  } else {
+    finishCalibrateFuck();
+  }
+}
+
+function finishCalibrateLeft() {
+    isCalibrating = false;
+    for (var i = 0; i < calibrationArray.length; i++) {
+      calibrationArray[i] = -calibrationArray[i];
     };
-    var lowerBound = -getMaxCalValue(calArray);
+    var lowerBound = -getMaxCalValue(calibrationArray);
     leftBound = lowerBound;
   }
 
-  function finishCalibrateRight(calArray) {
-    var upperBound = getMaxCalValue(calArray);
+  function finishCalibrateRight() {
+    isCalibrating = false;
+    var upperBound = getMaxCalValue(calibrationArray);
     rightBound = upperBound;
   }
 
-  function finishCalibrateFuck(calArray) {
-    var upperBound = getMaxCalValue(calArray);
+  function finishCalibrateFuck() {
+    isCalibrating = false;
+    var upperBound = getMaxCalValue(calibrationArray);
     fuckBound = upperBound;
   }
 
@@ -329,3 +361,11 @@ function finishCalibrateLeft(calArray) {
 
     return peakSum/peakCount;
   }
+
+function calibration(movement) {
+  if(isCalibrating) {
+    calibrationArray.push(movement); 
+  }
+}
+
+})(window, document);
