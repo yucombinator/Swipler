@@ -82,7 +82,7 @@ var startListening = function(){
         console.log('RIGHT!')
         break;
       case "FUCK":
-        //closeTab();
+        closeTab();
         console.log('FUCK!')
         break;
     }
@@ -106,5 +106,12 @@ chrome.extension.onMessage.addListener(
       startListening();
     } else if(request.getstatus == true){
       sendResponse(window.doppler.getStatus());
+    }
+});
+chrome.commands.onCommand.addListener(function (command) {
+    if (command === "stop") {
+        stopListening();
+    } else if (command == "start"){
+      startListening();
     }
 });

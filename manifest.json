@@ -23,6 +23,20 @@
     "default_title": "browser action demo",
     "default_popup": "src/browser_action/browser_action.html"
   },
+  "commands": {
+    "stop" : {
+        "suggested_key": {
+             "default": "Alt+Shift+S"
+        },
+        "description": "Stop"
+    },
+    "start" : {
+        "suggested_key": {
+             "default": "Alt+Shift+A"
+        },
+        "description": "Start"
+    }
+  },
   "permissions": [
     "idle",
     "notifications",
