@@ -5,13 +5,13 @@ var killswitch = function(){
 }
 
 var startswitch = function(){
-  chrome.runtime.sendMessage({killswitch: true});
+  chrome.runtime.sendMessage({start: true});
   document.querySelector(".stop-button").className = "stop-button";
   document.querySelector(".start-button").className += " hidden";
 }
 
 var settings = function(){
-  chrome.runtime.sendMessage({killswitch: true});
+  chrome.tabs.create({ url: "src/options_custom/index.html" });
 }
 function main() {
   // Initialization work goes here.

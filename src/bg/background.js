@@ -103,5 +103,7 @@ chrome.extension.onMessage.addListener(
       startListening();
     } else if (request.killswitch == true){
       stopListening();
+    } else if(request.start == true){
+      startListening();
     }
 });

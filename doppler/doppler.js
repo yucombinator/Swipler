@@ -194,6 +194,8 @@ window.doppler = (function() {
     stop: function () {
       clearInterval(readMicInterval);
       ctx.suspend();
+      osc.stop(0);
+      osc = ctx.createOscillator();
     }
   }
 })(window, document);
