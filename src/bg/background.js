@@ -69,7 +69,6 @@ var newTab = function(){
     console.log("new tab!!");
   });
 }
-
 var startListening = function(){
   console.log('init!')
   window.doppler.init(function(event) {
@@ -105,5 +104,7 @@ chrome.extension.onMessage.addListener(
       stopListening();
     } else if(request.start == true){
       startListening();
+    } else if(request.getstatus == true){
+      sendResponse(window.doppler.getStatus());
     }
 });

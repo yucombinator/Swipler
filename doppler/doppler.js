@@ -231,20 +231,26 @@ window.doppler = (function() {
     var nyquist = ctx.sampleRate / 2;
     return nyquist/(analyser.fftSize/2) * index;
   };
-
+  var started = false;
   return {
     init: function(callback) {
       ctx.resume();
+      started = true;
       navigator.getUserMedia_ = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
       navigator.getUserMedia_({ audio: { optional: [{ echoCancellation: false }] } }, function(stream) {
         handleMic(stream, readMic, callback);
       }, function() { console.log('Error!') });
     },
     stop: function () {
+      started = false;
       clearInterval(readMicInterval);
       ctx.suspend();
       osc.stop(0);
       osc = ctx.createOscillator();
+    },
+    getStatus: function(){
+      console.log(ctx.state);
+      return started;
     }
   }
 })(window, document);

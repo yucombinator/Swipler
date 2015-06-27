@@ -15,6 +15,16 @@ var settings = function(){
 }
 function main() {
   // Initialization work goes here.
+  chrome.runtime.sendMessage({getstatus: true},function(res){
+    console.log("state " + res);
+    if(res == true){
+      document.querySelector(".stop-button").className = "stop-button";
+      document.querySelector(".start-button").className += " hidden";
+    }else{
+      document.querySelector(".start-button").className = "start-button";
+      document.querySelector(".stop-button").className += " hidden";
+    }
+  });
 }
 
 // Add event listeners once the DOM has fully loaded by listening for the
