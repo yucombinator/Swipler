@@ -22,7 +22,8 @@
             //Cheap hack to acquire Media permissions as a chrome extension
             navigator.getUserMedia_ = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
             navigator.getUserMedia_({ audio: { optional: [{ echoCancellation: false }] } }, function(stream) {
-              console.log('Acquired permission!')
+              console.log('Acquired permission!');
+              chrome.runtime.sendMessage({permissionAcquired: true});
             }, function() {
               console.log('Error!')
             });

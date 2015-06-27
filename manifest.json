@@ -12,6 +12,7 @@
   "default_locale": "en",
   "background": {
     "scripts": [
+      "doppler/doppler.js",
       "src/bg/background.js"
     ],
     "persistent": true
