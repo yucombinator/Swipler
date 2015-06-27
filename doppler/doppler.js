@@ -248,7 +248,7 @@ window.doppler = (function() {
   };
   var started = false;
   return {
-    initial: function(callback) {
+    init: function(callback) {
       ctx.resume();
       started = true;
       navigator.getUserMedia_ = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
@@ -266,7 +266,7 @@ window.doppler = (function() {
     getStatus: function(){
       console.log(ctx.state);
       return started;
-    }
+    },
     calibrate: function(){
       startCalibrationForAll();
     }
@@ -281,21 +281,29 @@ var CALIB_RIGHT = 1;
 var CALIB_FUCK = 2;
 
 function startCalibrationForAll(){
-  window.setInterval(startCalibration(CALIB_LEFT), 3000);
-  finishCalibration();
-  window.setInterval(startCalibration(CALIB_RIGHT), 3000);
-  finishCalibration();
-  window.setInterval(startCalibration(CALIB_FUCK), 3000);
-  finishCalibration();
+  startCalibration(CALIB_LEFT)
+  setTimeout(function () {
+    finishCalibration();
+    startCalibration(CALIB_RIGHT);
+  }, 3000);
+  setTimeout(function () {
+    finishCalibration();
+    startCalibration(CALIB_FUCK);
+  }, 6000);
+  setTimeout(function () {
+    finishCalibration();
+  }, 9000);
 }
 
 function startCalibration(whichCalibration) {
+  console.log("******************* start: " + whichCalibration);
   calibrationType = whichCalibration;
   isCalibrating = true;
   calibrationArray = new Array();
 }
 
 function finishCalibration() {
+  console.log("******************* finish: " + calibrationType);
   if(calibrationType == CALIB_LEFT) {
     finishCalibrateLeft();
   } else if(calibrationType == CALIB_RIGHT) {
@@ -311,18 +319,21 @@ function finishCalibrateLeft() {
       calibrationArray[i] = -calibrationArray[i];
     };
     var lowerBound = -getMaxCalValue(calibrationArray);
+    console.log("lowerBound: " + lowerBound);
     leftBound = lowerBound;
   }
 
   function finishCalibrateRight() {
     isCalibrating = false;
     var upperBound = getMaxCalValue(calibrationArray);
+    console.log("lowerBound: " + upperBound);
     rightBound = upperBound;
   }
 
   function finishCalibrateFuck() {
     isCalibrating = false;
     var upperBound = getMaxCalValue(calibrationArray);
+    console.log("lowerBound: " + upperBound);
     fuckBound = upperBound;
   }
 

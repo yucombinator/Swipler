@@ -107,7 +107,6 @@ chrome.extension.onMessage.addListener(
     } else if(request.getstatus == true){
       sendResponse(window.doppler.getStatus());
     } else if(request.calibrate == true){
-      startListening();
       window.doppler.calibrate();
     }
 });
