@@ -23,7 +23,7 @@ function sizeBox(movement) {
 function checkSwipes(movement) {
   if(movement < -swipeThreshold) {
     swipeEvent(false);
-  } else if(diff <= swipeThreshold) {
+  } else if(movement <= swipeThreshold) {
     document.getElementById('click').innerHTML = "None";
   } else {
     swipeEvent(true);
