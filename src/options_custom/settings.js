@@ -1,11 +1,24 @@
 window.addEvent("domready", function () {
     // Option 1: Use the manifest:
     new FancySettings.initWithManifest(function (settings) {
-        settings.manifest.myButton.addEvent("action", function () {
-            alert("You clicked me!");
+        settings.manifest.permrequest.addEvent("action", function () {
+            //Cheap hack to acquire Media permissions as a chrome extension
+            navigator.getUserMedia_ = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
+            navigator.getUserMedia_({ audio: { optional: [{ echoCancellation: false }] } }, function(stream) {
+              console.log('Acquired permission!');
+              chrome.runtime.sendMessage({permissionAcquired: true}, function(response) {
+                console.log("received response");
+              });
+            }, function() {
+              console.log('Error!')
+            });
         });
     });
-
+    new FancySettings.initWithManifest(function (settings) {
+        settings.manifest.killswitch.addEvent("action", function () {
+            chrome.runtime.sendMessage({killswitch: true});
+        });
+    });
     // Option 2: Do everything manually:
     /*
     var settings = new FancySettings("My Extension", "icon.png");

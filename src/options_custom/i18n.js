@@ -13,15 +13,18 @@ this.i18n = {
         "de": "Keine Übereinstimmungen gefunden."
     },
 
-
-
-    "information": {
-        "en": "Information",
-        "de": "Information"
+    "killswitch": {
+        "en": "Kill Switch",
+        "de": "Kill Switch"
     },
-    "login": {
-        "en": "Login",
-        "de": "Anmeldung"
+
+    "status": {
+        "en": "Status",
+        "de": "Status"
+    },
+    "permissions": {
+        "en": "Permissions",
+        "de": "Permissions"
     },
     "username": {
         "en": "Username:",
