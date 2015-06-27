@@ -1,8 +1,17 @@
 // CONSTANTS
 var threshold = 4;
-var swipeThreshold = 3;
 var scale    = 10;
 var baseSize = 100;
+
+// SWIPE THRESHOLD
+var leftBound = -3;
+var rightBound = 4;
+var fuckBound = 14;
+
+// SWIPE TYPES
+var SWIPE_LEFT = 0;
+var SWIPE_RIGHT = 1;
+var SWIPE_FUCK = 2;
 
 // TRACKING VARS
 var lastVal = 0;
@@ -21,21 +30,30 @@ function sizeBox(movement) {
 }
 
 function checkSwipes(movement) {
-  if(movement < -swipeThreshold) {
-    swipeEvent(false);
-  } else if(movement <= swipeThreshold) {
+  if(movement < leftBound) {
+    swipeEvent(SWIPE_LEFT);
+  } else if(movement < rightBound) {
     document.getElementById('click').innerHTML = "None";
+  } else if(movement < fuckBound) {
+    swipeEvent(SWIPE_RIGHT);
   } else {
-    swipeEvent(true);
+    swipeEvent(SWIPE_FUCK);
   }
 }
 
-function swipeEvent(isRight) {
-  if(isRight) {
-    document.getElementById('click').innerHTML = "Right";
-  } else {
-    document.getElementById('click').innerHTML = "Left";
+function swipeEvent(whichSwipe) {
+  if(whichSwipe == SWIPE_LEFT) {
+    reportSwipeEvent("Left");
+  } else if(whichSwipe == SWIPE_RIGHT) {
+    reportSwipeEvent("Right");
+  } else if(whichSwipe == SWIPE_FUCK) {
+    reportSwipeEvent("Fuck");
   }
+}
+
+function reportSwipeEvent(swipeEvent) {
+  document.getElementById('click').innerHTML = swipeEvent;
+  console.log(swipeEvent);
 }
 
 window.addEventListener('load', function() {
