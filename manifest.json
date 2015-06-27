@@ -40,7 +40,8 @@
   "permissions": [
     "idle",
     "notifications",
-    "tabs"
+    "tabs",
+    "idle"
   ],
   "omnibox": {
     "keyword": "swipler"

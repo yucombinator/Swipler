@@ -118,3 +118,9 @@ chrome.commands.onCommand.addListener(function (command) {
       startListening();
     }
 });
+
+chrome.idle.onStateChanged.addListener(function (state){
+  if(state == "idle" || state == "locked"){
+    stopListening();
+  }
+});
