@@ -13,8 +13,6 @@ window.addEvent("domready", function () {
               console.log('Error!')
             });
         });
-    });
-    new FancySettings.initWithManifest(function (settings) {
         settings.manifest.killswitch.addEvent("action", function () {
             chrome.runtime.sendMessage({killswitch: true});
         });
