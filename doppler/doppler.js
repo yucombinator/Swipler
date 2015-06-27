@@ -234,7 +234,7 @@ window.doppler = (function() {
 
       clearInterval(readMicInterval);
       callback(analyser, userCallback);
-    });
+    }, 1000);
   };
 
   var freqToIndex = function(analyser, freq) {
