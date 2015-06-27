@@ -11,10 +11,12 @@ window.addEventListener('load', function() {
         document.getElementById('box').style.width  = dimension;
         document.getElementById('box').style.height = dimension;
 
-        if (diff < 13) {
-          document.getElementById('click').innerHTML = "Not!";
+        if(dimension < 100) {
+          document.getElementById('click').innerHTML = "Left";
+        } else if(dimension <= 130) {
+          document.getElementById('click').innerHTML = "None";
         } else {
-          document.getElementById('click').innerHTML = "Clicked!";
+          document.getElementById('click').innerHTML = "Right";
         }
       }
     });
