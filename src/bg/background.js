@@ -7,7 +7,7 @@
 var startListening = function(){
   console.log('init!')
   window.doppler.init(function(bandwidth) {
-          var threshold = 4;
+          var threshold = 7;
           if (bandwidth.left > threshold || bandwidth.right > threshold) {
             var scale    = 10;
             var baseSize = 100;
@@ -19,6 +19,10 @@ var startListening = function(){
 });
 }
 
+var stopListening = function(){
+  console.log('stop!')
+  window.doppler.stop();
+}
 
 //example of using a message handler from the inject scripts
 chrome.extension.onMessage.addListener(
@@ -26,5 +30,7 @@ chrome.extension.onMessage.addListener(
     if (request.permissionAcquired == true){
       sendResponse();
       startListening();
+    } else if (request.killswitch == true){
+      stopListening();
     }
 });
