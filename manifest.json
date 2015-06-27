@@ -25,9 +25,7 @@
   "permissions": [
     "idle",
     "notifications",
-    "tabs",
-    "audio",
-    "audioCapture"
+    "tabs"
   ],
   "omnibox": {
     "keyword": "extensionizr"
