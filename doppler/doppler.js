@@ -21,7 +21,7 @@ window.doppler = (function() {
     var primaryTone = freqToIndex(analyser, freq);
     var primaryVolume = freqs[primaryTone];
     // This ratio is totally empirical (aka trial-and-error).
-    var maxVolumeRatio = 0.01;
+    var maxVolumeRatio = 0.6;
 
     var leftBandwidth = 0;
     do {
@@ -66,6 +66,7 @@ window.doppler = (function() {
       return indexToFreq(analyser, maxAmpIndex);
     }
   };
+
   // CONSTANTS
   var threshold = 4;
   var scale    = 10;
@@ -73,9 +74,7 @@ window.doppler = (function() {
 
   // SWIPE THRESHOLD
   var leftBound = -3;
-  var centerLowBound = 0;
-  var centerHighBound = 2;
-  var rightBound = 4;
+  var rightBound = 3;
   var fuckBound = 14;
 
   // SWIPE TYPES
@@ -97,16 +96,13 @@ window.doppler = (function() {
   function checkSwipes(movement, userCallback) {
     if(movement < leftBound) {
       swipeEvent(SWIPE_LEFT, userCallback);
-    } else if(movement < centerLowBound) {
-      
-    } else if(movement < centerHighBound) {
-      swipeEvent(SWIPE_CENTER, userCallback);
-    } else if(movement < rightBound) {
-
-    } else if(movement < fuckBound) {
-      swipeEvent(SWIPE_RIGHT, userCallback);
-    } else {
-      swipeEvent(SWIPE_FUCK, userCallback);
+    }
+    if(movement > rightBound) {
+      if(movement < fuckBound) {
+        swipeEvent(SWIPE_RIGHT, userCallback);
+      } else {
+        swipeEvent(SWIPE_FUCK, userCallback);
+      }
     }
   }
 
@@ -199,3 +195,67 @@ window.doppler = (function() {
     }
   }
 })(window, document);
+
+
+
+
+
+
+
+
+
+// **** CALLIBRATION FUNCTIONS ****
+
+function finishCalibrateLeft(calArray) {
+    for (var i = 0; i < calArray.length; i++) {
+      calArray[i] = -calArray[i];
+    };
+    var lowerBound = -getMaxCalValue(calArray);
+    leftBound = lowerBound;
+  }
+
+  function finishCalibrateRight(calArray) {
+    var upperBound = getMaxCalValue(calArray);
+    rightBound = upperBound;
+  }
+
+  function finishCalibrateFuck(calArray) {
+    var upperBound = getMaxCalValue(calArray);
+    fuckBound = upperBound;
+  }
+
+  function getMaxCalValue(calArray) {
+    var current = calArray[0];
+    var up = current > 0;
+    var count = 5;
+
+    var peakSum = 0;
+    var peakCount = 0;
+
+    var current = 5;
+    for (var i = 1; i < calArray.length; i++) {
+      if(calArray[i] >= current) { // is going up
+        if(up) {
+          count ++;
+        } else {
+          up = true;
+          count = 0;
+        }
+      } else {
+        if(up) {    // turned around at peak
+          if(count > 1) { // valid peak
+            peakSum += current;
+            peakCount ++;
+          }
+          up = false;
+          count = 0;
+        } else {
+          count ++;
+        }
+      }
+
+      current = calArray[i];
+    };
+
+    return peakSum/peakCount;
+  }
