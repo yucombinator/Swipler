@@ -32,6 +32,13 @@ this.manifest = {
             "text": "Click to stop the extension"
         },
         {
+            "tab": i18n.get("status"),
+            "group": "Credits",
+            "name": "credits",
+            "type": "description",
+            "text": "Developed at EngHack S15 by Jason Zukewich, Ruo Tai Sun, Steven Kong and Yu Chen Hou"
+        },
+        {
             "tab": "Details",
             "group": "Sound",
             "name": "noti_volume",
