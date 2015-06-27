@@ -21,7 +21,7 @@ window.doppler = (function() {
     var primaryTone = freqToIndex(analyser, freq);
     var primaryVolume = freqs[primaryTone];
     // This ratio is totally empirical (aka trial-and-error).
-    var maxVolumeRatio = 0.001;
+    var maxVolumeRatio = 0.01;
 
     var leftBandwidth = 0;
     do {
@@ -73,7 +73,7 @@ window.doppler = (function() {
 
   // SWIPE THRESHOLD
   var leftBound = -3;
-  var centerLowBound = -1;
+  var centerLowBound = 0;
   var centerHighBound = 2;
   var rightBound = 4;
   var fuckBound = 14;
@@ -91,7 +91,7 @@ window.doppler = (function() {
   function logMovement(movement) {
       var s = '';
       while (s.length < movement+10) s += "**";
-      console.log(s);
+      console.log(s + ": " + movement);
   }
 
   function checkSwipes(movement, userCallback) {
@@ -102,7 +102,7 @@ window.doppler = (function() {
     } else if(movement < centerHighBound) {
       swipeEvent(SWIPE_CENTER, userCallback);
     } else if(movement < rightBound) {
-      
+
     } else if(movement < fuckBound) {
       swipeEvent(SWIPE_RIGHT, userCallback);
     } else {
@@ -122,7 +122,16 @@ window.doppler = (function() {
         userCallback("FUCK");
       }
     }
-    if(whichSwipe == SWIPE_RIGHT && state == SWIPE_FUCK) {
+
+    if(whichSwipe == SWIPE_RIGHT && state == SWIPE_LEFT) {
+      userCallback("RIGHT");
+    }
+
+    if(whichSwipe == SWIPE_LEFT && state == SWIPE_RIGHT) {
+      userCallback("LEFT");
+    }
+
+    if(whichSwipe != SWIPE_RIGHT && state == SWIPE_FUCK) {
       userCallback("FUCK");
     }
 
