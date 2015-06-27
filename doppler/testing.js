@@ -7,6 +7,29 @@ var baseSize = 100;
 // TRACKING VARS
 var lastVal = 0;
 
+function logMovement(movement) { 
+    var s = ''; 
+    while (s.length < movement+10) s += "**"; 
+    console.log(s);
+}
+
+function sizeBox(movement) {
+  var dimension = (baseSize + scale*movement) + 'px';
+
+  document.getElementById('box').style.width  = dimension;
+  document.getElementById('box').style.height = dimension;
+}
+
+function checkSwipes(movement) {
+  if(movement < -swipeThreshold) {
+    swipeEvent(false);
+  } else if(diff <= swipeThreshold) {
+    document.getElementById('click').innerHTML = "None";
+  } else {
+    swipeEvent(true);
+  }
+}
+
 function swipeEvent(isRight) {
   if(isRight) {
     document.getElementById('click').innerHTML = "Right";
@@ -15,34 +38,18 @@ function swipeEvent(isRight) {
   }
 }
 
-function stringLen(length) { 
-    var s = ''; 
-    while (s.length < length) s += "**"; 
-    return s; 
-} 
-
 window.addEventListener('load', function() {
   window.doppler.init(function(bandwidth) {
     if (bandwidth.left > threshold || bandwidth.right > threshold) {
-      var diff = bandwidth.left - bandwidth.right;
+      var movement = bandwidth.left - bandwidth.right;
+      // lower values mean moving towards the microphone, a swipe goes to around -4 for left and +4 for right
 
-      if(lastVal != diff) {
-        lastVal = diff;
+      if(lastVal != movement) {
+        lastVal = movement;
 
-        console.log(stringLen(diff+10));
-
-        var dimension = (baseSize + scale*diff) + 'px';
-
-        document.getElementById('box').style.width  = dimension;
-        document.getElementById('box').style.height = dimension;
-
-        if(diff < -swipeThreshold) {
-          swipeEvent(false);
-        } else if(diff <= swipeThreshold) {
-          document.getElementById('click').innerHTML = "None";
-        } else {
-          swipeEvent(true);
-        }
+        logMovement(movement);
+        sizeBox(movement);
+        checkSwipes(movement);
       }
     }
   });
