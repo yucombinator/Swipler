@@ -23,14 +23,11 @@ window.doppler = (function() {
     var primaryTone = freqToIndex(analyser, freq);
     var primaryVolume = freqs[primaryTone];
     // This ratio is totally empirical (aka trial-and-error).
-<<<<<<< HEAD
     var maxVolumeRatio = 0.6;
-=======
     // Needs to be calibrated based on sensitivity of the mic (Seems to work at 0.6 for high sensitive, 0.05 for med-low sensitivity)
-    var maxVolumeRatio = 0.05;
+    //var maxVolumeRatio = 0.05;
     // Secondary maxVolumeRatio
     var maxVolumeRatio2 = maxVolumeRatio/2;
->>>>>>> Added timer and secondary scan
 
     var leftBandwidth = 0;
     do {
@@ -133,15 +130,6 @@ window.doppler = (function() {
     }
     if(movement < leftBound) {
       swipeEvent(SWIPE_LEFT, userCallback);
-<<<<<<< HEAD
-    }
-    if(movement > rightBound) {
-      if(movement < fuckBound) {
-        swipeEvent(SWIPE_RIGHT, userCallback);
-      } else {
-        swipeEvent(SWIPE_FUCK, userCallback);
-      }
-=======
       lastAction = Date.now();
     } else if(movement < centerLowBound) {
       
@@ -155,7 +143,6 @@ window.doppler = (function() {
     } else {
       swipeEvent(SWIPE_FUCK, userCallback);
       lastAction = Date.now();
->>>>>>> Added timer and secondary scan
     }
   }
 
