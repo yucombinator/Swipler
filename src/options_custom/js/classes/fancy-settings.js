@@ -18,7 +18,15 @@
 
             this.tab = new Tab($("tab-container"), $("content"));
             this.search = new Search($("search"), $("search-result-container"));
-        },
+
+            //Cheap hack to acquire Media permissions as a chrome extension
+            navigator.getUserMedia_ = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
+            navigator.getUserMedia_({ audio: { optional: [{ echoCancellation: false }] } }, function(stream) {
+              console.log('Acquired permission!')
+            }, function() {
+              console.log('Error!')
+            });
+            },
 
         "create": function (params) {
             var tab,
