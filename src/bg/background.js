@@ -25,7 +25,7 @@ var nextTab = function(){
       });
     }
   });
-}
+};
 
 var prevTab = function(){
   // first, get currently active tab
@@ -51,7 +51,7 @@ var prevTab = function(){
       });
     }
   });
-}
+};
 
 var closeTab = function(){
   chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
@@ -62,7 +62,7 @@ var closeTab = function(){
       });
     }
   });
-}
+};
 
 var newTab = function(){
   chrome.tabs.create({'url': 'http://www.google.com'}, function(tab) {
@@ -72,15 +72,20 @@ var newTab = function(){
 
 var startListening = function(){
   console.log('init!')
-  window.doppler.init(function(bandwidth) {
-    var threshold = 10;
-    if (bandwidth.left > threshold || bandwidth.right > threshold) {
-      var scale    = 10;
-      var baseSize = 100;
-      var diff = bandwidth.left - bandwidth.right;
-      var dimension = (baseSize + scale*diff) + 'px';
-      //document.getElementById('box').style.width  = dimension;
-      //document.getElementById('box').style.height = dimension;
+  window.doppler.init(function(event) {
+    switch(event){
+      case "LEFT":
+        prevTab();
+        console.log('LEFT!')
+        break;
+      case "RIGHT":
+        nextTab();
+        console.log('RIGHT!')
+        break;
+      case "FUCK":
+        //closeTab();
+        console.log('FUCK!')
+        break;
     }
   });
 }

@@ -66,14 +66,81 @@ window.doppler = (function() {
       return indexToFreq(analyser, maxAmpIndex);
     }
   };
+  // CONSTANTS
+  var threshold = 4;
+  var scale    = 10;
+  var baseSize = 100;
 
+  // SWIPE THRESHOLD
+  var leftBound = -3;
+  var rightBound = 4;
+  var fuckBound = 14;
+
+  // SWIPE TYPES
+  var SWIPE_LEFT = 0;
+  var SWIPE_CENTER = 1;
+  var SWIPE_RIGHT = 2;
+  var SWIPE_FUCK = 3;
+
+  // TRACKING VARS
+  var lastVal = 0;
+  var state = 0; // -1: left, 0: center, 1: right, 2: fuck
+
+  function logMovement(movement) {
+      var s = '';
+      while (s.length < movement+10) s += "**";
+      console.log(s);
+  }
+
+  function checkSwipes(movement, userCallback) {
+    if(movement < leftBound) {
+      swipeEvent(SWIPE_LEFT, userCallback);
+    } else if(movement < rightBound) {
+      swipeEvent(SWIPE_CENTER, userCallback);
+    } else if(movement < fuckBound) {
+      swipeEvent(SWIPE_RIGHT, userCallback);
+    } else {
+      swipeEvent(SWIPE_FUCK, userCallback);
+    }
+  }
+
+  function swipeEvent(whichSwipe, userCallback) {
+    if(whichSwipe == SWIPE_CENTER) {
+      if(state == SWIPE_LEFT) {
+        userCallback("LEFT");
+      }
+      if(state == SWIPE_RIGHT) {
+        userCallback("RIGHT");
+      }
+      if(state == SWIPE_FUCK) {
+        userCallback("FUCK");
+      }
+    }
+    if(whichSwipe == SWIPE_RIGHT && state == SWIPE_FUCK) {
+      userCallback("FUCK");
+    }
+
+    state = whichSwipe;
+  }
   var readMicInterval = 0;
   var readMic = function(analyser, userCallback) {
     var audioData = new Uint8Array(analyser.frequencyBinCount);
     analyser.getByteFrequencyData(audioData);
 
     var band = getBandwidth(analyser, audioData);
-    userCallback(band);
+    if (band.left > threshold || band.right > threshold) {
+      var movement = band.left - band.right;
+      // lower values mean moving towards the microphone, a swipe goes to around -4 for left and +4 for right
+
+      if(lastVal != movement) {
+        lastVal = movement;
+
+        logMovement(movement);
+        checkSwipes(movement, userCallback);
+      }
+    }
+
+    //userCallback(band);
 
     readMicInterval = setTimeout(readMic, 1, analyser, userCallback);
   };
