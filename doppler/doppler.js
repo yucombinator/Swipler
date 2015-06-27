@@ -159,6 +159,10 @@ window.doppler = (function() {
     }
   }
 
+  var rollingAverage = 0.7;
+  var rollingAverageMagAdjust = 1.3;
+  var movement = 0;
+
   var readMicInterval = 0;
   var readMic = function(analyser, userCallback) {
     var audioData = new Uint8Array(analyser.frequencyBinCount);
@@ -166,7 +170,10 @@ window.doppler = (function() {
 
     var band = getBandwidth(analyser, audioData);
     if (band.left > threshold || band.right > threshold) {
-      var movement = band.left - band.right;
+      var movementRaw = (band.left - band.right) * rollingAverageMagAdjust;
+
+      movement = (movementRaw * rollingAverage) + (movement * (1 - rollingAverage))
+
       
       if (Date.now() - lastChange > 800) {
         fastSwipeFrames = maxFastSwipeFrames;
@@ -193,6 +200,8 @@ window.doppler = (function() {
             highestRight = 0;
           }
         } else {
+
+          console.log(movement + " Please go Left");
 
           checkSwipes(movement, userCallback);
 
