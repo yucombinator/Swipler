@@ -86,7 +86,7 @@ window.doppler = (function() {
 
   // TRACKING VARS
   var lastVal = 0;
-  var state = 0; // -1: left, 0: center, 1: right, 2: fuck
+  var lastTask = 0;
 
   function logMovement(movement) {
       var s = '';
@@ -111,31 +111,15 @@ window.doppler = (function() {
   }
 
   function swipeEvent(whichSwipe, userCallback) {
-    if(whichSwipe == SWIPE_CENTER) {
-      if(state == SWIPE_LEFT) {
-        userCallback("LEFT");
-      }
-      if(state == SWIPE_RIGHT) {
-        userCallback("RIGHT");
-      }
-      if(state == SWIPE_FUCK) {
-        userCallback("FUCK");
-      }
-    }
-
-    if(whichSwipe == SWIPE_RIGHT && state == SWIPE_LEFT) {
-      userCallback("RIGHT");
-    }
-
-    if(whichSwipe == SWIPE_LEFT && state == SWIPE_RIGHT) {
+    if(whichSwipe == SWIPE_LEFT) {
       userCallback("LEFT");
     }
-
-    if(whichSwipe != SWIPE_RIGHT && state == SWIPE_FUCK) {
+    if(whichSwipe == SWIPE_RIGHT) {
+      userCallback("RIGHT");
+    }
+    if(whichSwipe == SWIPE_FUCK) {
       userCallback("FUCK");
     }
-
-    state = whichSwipe;
   }
   var readMicInterval = 0;
   var readMic = function(analyser, userCallback) {
