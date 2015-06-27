@@ -1,17 +1,26 @@
 <!doctype html>
-<style type="text/css">
-	#mainPopup {
-		padding: 10px;
-		height: 200px;
-		width: 400px;
-		font-family: Helvetica, Ubuntu, Arial, sans-serif;
-	}
-	h1 {
-		font-size: 2em;
-	}
-</style>
-
-<div id="mainPopup">
-<button>Click me</button>
-</div>
-<script src="popup.js"></script>
+<html>
+  <head>
+    <title>Toggl Button</title>
+    <link rel="stylesheet" href="style.css"/>
+  </head>
+  <body>
+    <div class="header"></div>
+    <ul class="menu view">
+      <li>
+        <button class="stop-button">Stop listening</button>
+      </li>
+      <li>
+        <button class="start-button hidden">Start listening</button>
+      </li>
+      <li>
+        <button class="calibrate-button">Calibrate</button>
+      </li>
+      <hr>
+      <li>
+        <button class="settings-button">Settings</button>
+      </li>
+    </ul>
+    <script src="popup.js"></script>
+  </body>
+</html>
