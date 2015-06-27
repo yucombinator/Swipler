@@ -73,6 +73,8 @@ window.doppler = (function() {
 
   // SWIPE THRESHOLD
   var leftBound = -3;
+  var centerLowBound = -1;
+  var centerHighBound = 2;
   var rightBound = 4;
   var fuckBound = 14;
 
@@ -95,8 +97,12 @@ window.doppler = (function() {
   function checkSwipes(movement, userCallback) {
     if(movement < leftBound) {
       swipeEvent(SWIPE_LEFT, userCallback);
-    } else if(movement < rightBound) {
+    } else if(movement < centerLowBound) {
+      
+    } else if(movement < centerHighBound) {
       swipeEvent(SWIPE_CENTER, userCallback);
+    } else if(movement < rightBound) {
+      
     } else if(movement < fuckBound) {
       swipeEvent(SWIPE_RIGHT, userCallback);
     } else {
