@@ -131,18 +131,15 @@ window.doppler = (function() {
     if(movement < leftBound) {
       swipeEvent(SWIPE_LEFT, userCallback);
       lastAction = Date.now();
-    } else if(movement < centerLowBound) {
-      
-    } else if(movement < centerHighBound) {
-      swipeEvent(SWIPE_CENTER, userCallback);
-    } else if(movement < rightBound) {
-
-    } else if(movement < fuckBound) {
-      swipeEvent(SWIPE_RIGHT, userCallback);
-      lastAction = Date.now();
-    } else {
-      swipeEvent(SWIPE_FUCK, userCallback);
-      lastAction = Date.now();
+    }
+    if(movement > rightBound) {
+      if(movement < fuckBound) {
+        swipeEvent(SWIPE_RIGHT, userCallback);
+        lastAction = Date.now();
+      } else {
+        swipeEvent(SWIPE_FUCK, userCallback);
+        lastAction = Date.now();
+      }
     }
   }
 
