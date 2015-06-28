@@ -37,7 +37,7 @@ this.manifest = {
             "name": "credits",
             "type": "description",
             "text": "Developed at EngHack S15 by Jason Zukewich, Ruo Tai Sun, Steven Kong and Yu Chen Hou"
-        },
+        }/*,
         {
             "tab": "Details",
             "group": "Sound",
@@ -115,12 +115,12 @@ this.manifest = {
                 ["hot", "Hot and yummy"],
                 ["cold"]
             ]
-        }
+        }*/
     ],
     "alignment": [
-        [
+        /*[
             "noti_volume",
             "sound_volume"
-        ]
+        ]*/
     ]
 };
